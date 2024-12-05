@@ -21,6 +21,6 @@ that we have covered, e.g. bump mapping, shading, etc. You are free to obtain sa
 shaders or create your own by using online repositories, e.g. https://shaderfrog.com. 
 
 > [!TIP]
-> For learning more interactive, you can see Three.js tutorial [here](https:/threejs.org/) which give you many interactive examples [here](https://threejs.org/examples/).
+> For learning more interactive, you can see Three.js tutorial [here](https:/threejs.org/) which give you many interactive [examples](https://threejs.org/examples/).
 
 You will create a scene that concept’s art gallery museum and there will be some objects according to art gallery museum concept. 
