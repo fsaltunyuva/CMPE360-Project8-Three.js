@@ -29,22 +29,24 @@ scene.add( floor );
 
 const loader = new THREE.CubeTextureLoader();
 const texture = loader.load([
-    'path/to/px.jpg', // +X
-    'path/to/nx.jpg', // -X
-    'path/to/py.jpg', // +Y
-    'path/to/ny.jpg', // -Y
-    'path/to/pz.jpg', // +Z
-    'path/to/nz.jpg'  // -Z
+    // The skybox assets downloaded from https://opengameart.org/content/park-skyboxes.
+    // And they belong to Emil Persson, aka Humus.
+    "/park-skybox/posx.jpg", // +X
+    "/park-skybox/negx.jpg", // -X
+    "/park-skybox/posy.jpg", // +Y
+    "/park-skybox/negy.jpg", // -Y
+    "/park-skybox/posz.jpg", // +Z
+    "/park-skybox/negz.jpg"  // -Z
 ]);
 scene.background = texture;
 
 renderer.render( scene, camera );
 
 // To animate the cube, we need to create a function that will be called on every frame.
-//
 function animate() {
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+    camera.rotation.y += 0.0001; // Rotate the camera to see the skybox
 
     renderer.render( scene, camera );
 }
