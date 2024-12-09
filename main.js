@@ -2,6 +2,7 @@
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import {MeshBasicMaterial} from "three";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -30,6 +31,57 @@ scene.add( floor );
 const cube_geometry = new THREE.BoxGeometry(1, 1, 1);
 const cube_material = new THREE.MeshLambertMaterial({ color: 0x00ff00 }); // Lambert material is used to reflect the light
 
+const painting_geometry = new THREE.PlaneGeometry( 10, 7.5); // The ratio of the resolution is something like 1.5 (width/height), therefore I used similar ratio
+const texture_painting = new THREE.TextureLoader().load( "CountryCelebration.jpg" );
+const painting_material = new THREE.MeshLambertMaterial( { map: texture_painting } ); // Lambert material is used to reflect the light
+const painting1 = new THREE.Mesh( painting_geometry, painting_material );
+painting1.position.set(0, 2, 0.2);
+painting1.scale.set(0.3, 0.3, 0.3);
+
+const easel_leg_1_geometry = new THREE.BoxGeometry(0.1, 3, 0.1);
+const easel_leg_1_material = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+const easel_leg_1_painting1 = new THREE.Mesh(easel_leg_1_geometry, easel_leg_1_material);
+easel_leg_1_painting1.position.set(0.5, 1, 0);
+easel_leg_1_painting1.rotateZ(Math.PI / 8);
+
+const easel_leg_2_geometry = new THREE.BoxGeometry(0.1, 3, 0.1);
+const easel_leg_2_material = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+const easel_leg_2_painting1 = new THREE.Mesh(easel_leg_2_geometry, easel_leg_2_material);
+easel_leg_2_painting1.position.set(-0.5, 1, 0);
+easel_leg_2_painting1.rotateZ(-Math.PI / 8);
+
+const painting_group1 = new THREE.Group();
+painting_group1.add(painting1);
+painting_group1.add(easel_leg_1_painting1);
+painting_group1.add(easel_leg_2_painting1);
+painting_group1.scale.set(0.75, 0.75, 0.75);
+painting_group1.position.set(3, -1.5, 6);
+painting_group1.rotateY(Math.PI / 2 + 10);
+scene.add(painting_group1);
+
+const easel_leg_1_painting2 = new THREE.Mesh(easel_leg_1_geometry, easel_leg_1_material);
+easel_leg_1_painting2.position.set(0.5, 1, 0);
+easel_leg_1_painting2.rotateZ(Math.PI / 8);
+
+const easel_leg_2_painting2 = new THREE.Mesh(easel_leg_2_geometry, easel_leg_2_material);
+easel_leg_2_painting2.position.set(-0.5, 1, 0);
+easel_leg_2_painting2.rotateZ(-Math.PI / 8);
+
+const texture_painting2 = new THREE.TextureLoader().load( "peakpx.jpg" );
+const painting_material2 = new THREE.MeshLambertMaterial( { map: texture_painting2 } ); // Lambert material is used to reflect the light
+const painting2 = new THREE.Mesh( painting_geometry, painting_material2 );
+painting2.position.set(0, 2, 0.2);
+painting2.scale.set(0.3, 0.3, 0.3);
+
+const painting_group2 = new THREE.Group();
+painting_group2.add(painting2);
+painting_group2.add(easel_leg_1_painting2);
+painting_group2.add(easel_leg_2_painting2);
+painting_group2.scale.set(0.75, 0.75, 0.75);
+painting_group2.position.set(-3, -1.5, 6);
+painting_group2.rotateY(-Math.PI / 2 - 10);
+scene.add(painting_group2);
+
 var pointlight_intensity = 5;
 
 const pointLight1 = new THREE.PointLight(0xffffff, pointlight_intensity);
@@ -56,7 +108,7 @@ const cube2 = new THREE.Mesh(cube_geometry, cube_material);
 cube2.position.set(-3, -1.5, 6);
 pointLight2.position.set(-3, -1, 6);
 scene.add(pointLight2);
-scene.add(cube2);
+//scene.add(cube2);
 
 // Cube 3
 const cube3 = new THREE.Mesh(cube_geometry, cube_material);
@@ -70,7 +122,7 @@ const cube4 = new THREE.Mesh(cube_geometry, cube_material);
 cube4.position.set(3, -1.5, 6);
 pointLight4.position.set(3, -1, 6);
 scene.add(pointLight4);
-scene.add(cube4);
+// scene.add(cube4);
 
 // Skybox
 const loader = new THREE.CubeTextureLoader();
@@ -97,6 +149,7 @@ loader2.load(
     function ( engine ) {
         engine.scale.set(0.1, 0.1, 0.1);
         engine.position.set(-2.8, -1, 1);
+        engine.color = 0x0000ff;
         scene.add( engine );
     }
 );
