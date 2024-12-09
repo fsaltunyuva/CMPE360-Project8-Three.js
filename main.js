@@ -52,7 +52,7 @@ easel_leg_2_painting1.position.set(-0.5, 1, 0); // Position the easel leg
 easel_leg_2_painting1.rotateZ(-Math.PI / 8); // Rotate the easel leg
 
 // Painting 1
-const texture_painting = new THREE.TextureLoader().load( "CountryCelebration.jpg" ); // Loading the texture for the painting
+const texture_painting = new THREE.TextureLoader().load( "CountryCelebration.jpg" ); // Loading the texture for the painting "Country Celebration" by Teniers the Younger, David
 const painting_material = new THREE.MeshLambertMaterial( { map: texture_painting } ); // Lambert material is used to reflect the light
 const painting1 = new THREE.Mesh( painting_geometry, painting_material ); // Mesh is used to combine the geometry and the material
 painting1.position.set(0, 2, 0.2); // Position the painting
@@ -79,7 +79,7 @@ easel_leg_2_painting2.position.set(-0.5, 1, 0);
 easel_leg_2_painting2.rotateZ(-Math.PI / 8);
 
 // Painting 2
-const texture_painting2 = new THREE.TextureLoader().load( "peakpx.jpg" ); // Loading the texture for the painting
+const texture_painting2 = new THREE.TextureLoader().load( "peakpx.jpg" ); // Loading the texture for the painting "The Hay Wain" by John Constable
 const painting_material2 = new THREE.MeshLambertMaterial( { map: texture_painting2 } ); // Lambert material is used to reflect the light
 const painting2 = new THREE.Mesh( painting_geometry, painting_material2 ); // Mesh is used to combine the geometry and the material (with same geometry)
 painting2.position.set(0, 2, 0.2); // Position the painting
