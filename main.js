@@ -12,8 +12,9 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 // Camera is placed at (0, 3, 15) and looking at (0, 0, 0)
-camera.position.z = 15;
-camera.position.y = 3;
+//camera.position.z = 15;
+//camera.position.y = 3;
+camera.position.set(0, 3, 15);
 camera.lookAt(0, 0, 0);
 
 // Directional light and its properties
@@ -31,8 +32,11 @@ floor.position.y = -2; // Position the floor below the objects
 floor.rotateX( -Math.PI / 2 ); // Rotate the floor to make it horizontal
 scene.add( floor ); // Add the floor to the scene
 
+const stand_geometry = new THREE.CylinderGeometry(2.5, 2, 1.5); // Cylinder geometry is used to create a stand 
+const stand_material = new THREE.MeshLambertMaterial({ color: 0x808080}); // Lambert material is used to reflect the light
+
 const cube_geometry = new THREE.BoxGeometry(1, 1, 1); // Box geometry is used to create a cube (created for all cubes)
-const cube_material = new THREE.MeshLambertMaterial({ color: 0x00ff00 }); // Lambert material is used to reflect the light
+const cube_material = new THREE.MeshLambertMaterial({ color: 0x8B0000 }); // Lambert material is used to reflect the light
 
 // Geometry for paintings
 const painting_geometry = new THREE.PlaneGeometry( 10, 7.5); // The ratio of the resolution is something like 1.5 (width/height), therefore I used similar ratio
@@ -121,20 +125,21 @@ pointLight4.color.setRGB(r_value_of_pointlight, g_value_of_pointlight, b_value_o
 pointLight4.position.set(3, -1, 6); // Position the point light
 scene.add(pointLight4); // Add the point light to the scene
 
+// Stand
+const stand = new THREE.Mesh(stand_geometry, stand_material); // Mesh is used to combine the geometry and the material
+stand.position.set(0, -1, -3); // Position the stand
+scene.add(stand); // Add the stand to the scene
+
 // Cube 1
 const cube1 = new THREE.Mesh(cube_geometry, cube_material); // Mesh is used to combine the geometry and the material
 cube1.position.set(-3, -1.5, 0); // Position the cube
 scene.add(cube1); // Add the cube to the scene
 
-// Cube 2
-// const cube2 = new THREE.Mesh(cube_geometry, cube_material); // Mesh is used to combine the geometry and the material
-// cube2.position.set(-3, -1.5, 6); // Position the cube
-// scene.add(cube2); // Add the cube to the scene
 
 // Cube 3
-const cube3 = new THREE.Mesh(cube_geometry, cube_material); // Mesh is used to combine the geometry and the material
-cube3.position.set(3, -1.5, 0); // Position the cube
-scene.add(cube3); // Add the cube to the scene
+const cube2 = new THREE.Mesh(cube_geometry, cube_material); // Mesh is used to combine the geometry and the material
+cube2.position.set(3, -1.5, 0); // Position the cube
+scene.add(cube2); // Add the cube to the scene
 
 // Cube 4
 const cube4 = new THREE.Mesh(cube_geometry, cube_material); // Mesh is used to combine the geometry and the material
@@ -162,13 +167,59 @@ const objLoader = new OBJLoader(); // Global OBJLoader is used to load the objec
 // load a resource
 objLoader.load(
     // resource URL
-    'v12obj.obj', //https://sketchfab.com/3d-models/free-v12-12-cylinder-v-engine-e3508e360b5041c5972d78c9b04907e3
+    'Skull_OBJ.OBJ', //https://www.turbosquid.com/3d-models/skull-printing-obj/690305
     // called when resource is loaded
-    function ( engine ) {
-        engine.scale.set(0.1, 0.1, 0.1);
-        engine.position.set(-2.8, -1, 1);
-        engine.color = 0x0000ff;
-        scene.add( engine );
+    function ( skull ) {
+        skull.scale.set(0.5, 0.5, 0.5);
+        skull.position.set(-3, -0.4, 0);
+        skull.rotation.y = Math.PI / 1;
+        scene.add( skull );
+    }
+);
+
+objLoader.load(
+    // resource URL
+    'AlienBust_OBJ.OBJ', //https://www.turbosquid.com/3d-models/alien-bust-sculpture-3d-model/695955
+    // called when resource is loaded
+    function ( bust ) {
+        bust.scale.set(0.5, 0.5, 0.5);
+        bust.position.set(3, 0.1, 0);
+        bust.rotation.y = Math.PI / 1;
+        scene.add( bust );
+    }
+);
+
+objLoader.load(
+    // resource URL
+    'Deer_Sculpt.obj', //https://www.turbosquid.com/3d-models/3d-deer-sculpt-1791447
+    // called when resource is loaded
+    function ( deer ) {
+        deer.scale.set(0.6, 0.6, 0.6);
+        deer.position.set(0, 0.75, -3);
+        deer.rotation.y = Math.PI / 4;
+        scene.add( deer );
+    }
+);
+
+objLoader.load(
+    // resource URL
+    'objPillars.obj', //https://www.turbosquid.com/3d-models/ancient-fantasy-pillar-3d-model-2291481
+    // called when resource is loaded
+    function ( pillar1 ) {
+        pillar1.scale.set(4, 4, 4);
+        pillar1.position.set(-3.5, -1, -3);
+        scene.add( pillar1 );
+    }
+);
+
+objLoader.load(
+    // resource URL
+    'objPillar.obj', //https://www.turbosquid.com/3d-models/3d-model-free-old-column-2283380
+    // called when resource is loaded
+    function ( pillar2 ) {
+        pillar2.scale.set(0.8, 0.7, 0.9);
+        pillar2.position.set(3.5, -1, -3);
+        scene.add( pillar2 );
     }
 );
 
@@ -230,13 +281,79 @@ objLoader.load(
     }
 );
 
+// === KEYBOARD CONTROLS ===
+const moveSpeed = 0.5; 
+const rotateSpeed = 0.02;
+window.addEventListener('keydown', (event) => {
+    switch (event.code) {
+        case 'ArrowUp': // Move the camera forward
+            camera.position.z -= moveSpeed * Math.cos(camera.rotation.y);
+            camera.position.x -= moveSpeed * Math.sin(camera.rotation.y);
+            break;
+        case 'ArrowDown': // Move the camera backward
+            camera.position.z += moveSpeed * Math.cos(camera.rotation.y);
+            camera.position.x += moveSpeed * Math.sin(camera.rotation.y);
+            break;
+        case 'ArrowLeft': // Rotate the camera to the left
+            camera.rotation.y += rotateSpeed;
+            break;
+        case 'ArrowRight': // Rotate the camera to the right
+            camera.rotation.y -= rotateSpeed;
+            break;
+
+    }
+});
+
+window.addEventListener('keyup', (event) => {
+});
+
+// Custom shader material for metallic reflection effect
+const metallicShaderMaterial = new THREE.ShaderMaterial({
+    vertexShader: `
+        varying vec3 vNormal;
+        varying vec3 vPosition;
+
+        void main() {
+            vNormal = normalize(normalMatrix * normal);
+            vPosition = position;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        varying vec3 vNormal;
+        varying vec3 vPosition;
+
+        void main() {
+            vec3 lightDirection = normalize(vec3(0.5, 1.0, 0.75)); // Direction of the light source
+            vec3 viewDirection = normalize(vec3(0.0, 0.0, 1.0)); // Viewer's direction
+
+            float specular = pow(max(dot(reflect(-lightDirection, vNormal), viewDirection), 0.0), 16.0);
+            float diffuse = max(dot(vNormal, lightDirection), 0.0);
+
+            vec3 baseColor = vec3(0.8, 0.8, 0.9); // Silver metallic color
+            vec3 finalColor = baseColor * diffuse + vec3(1.0) * specular;
+
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    `
+});
+
+stand.material = metallicShaderMaterial; // Apply shader material to the stand
+
+
 /* ====== RENDERING AND ANIMATING ====== */
 renderer.render( scene, camera );
 
 // To animate the cube, we need to create a function that will be called on every frame.
+let standDirection = 1;
 function animate() {
-    // cube1.rotation.x += 0.01;
-    // cube1.rotation.y += 0.01;
+    cube1.rotation.y += 0.01;
+    cube2.rotation.y += 0.01;
+    stand.position.x += 0.01 * standDirection;
+    if (stand.position.x > 0.3 || stand.position.x < -0.3) {
+        standDirection *= -1; 
+    }
     //camera.rotation.y += 0.0001; // Rotate the camera to see the skybox
 
     renderer.render( scene, camera );
